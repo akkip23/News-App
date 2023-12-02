@@ -1,24 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import Register from "./Pages/Register";
+import Login from "./Pages/Login";
+import Home from "./Pages/Home";
+import Navbar from "./Components/Navbar";
+import NewsDetails from "./Pages/NewsDetail";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Provider } from "react-redux";
+import store from "./Store"; // Import the Redux store;
 
 function App() {
+  const [Details, setDetails] = useState({});
+  const HandleCardDetails = (data) => {
+    console.log("data in app", data);
+    setDetails(data);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Provider store={store}>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Navbar />}>
+            <Route index element={<Home cardDetails={HandleCardDetails} />} />
+            <Route
+              path="details"
+              element={<NewsDetails NewsCardDetail={Details} />}
+            />
+          </Route>
+
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
+          {/* Add more routes for other pages */}
+        </Routes>
+      </Router>
+    </Provider>
   );
 }
 
